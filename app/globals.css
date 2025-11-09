@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Remove the problematic dark mode auto-switching */
+/* Force light theme for better readability */
+:root {
+  color-scheme: light;
+}
+
+/* Ensure readable text by default */
+body {
+  background-color: #f9fafb; /* gray-50 */
+  color: #111827; /* gray-900 - dark, readable text */
+}
+
+/* Override dark mode to prevent white text on light backgrounds */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light; /* Force light scheme */
+  }
+  
+  body {
+    background-color: #f9fafb; /* gray-50 - keep light background */
+    color: #111827; /* gray-900 - keep dark text */
+  }
+}
+
+/* Ensure form inputs have readable text */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  background-color: #ffffff; /* white background */
+  color: #111827; /* gray-900 - dark text */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af; /* gray-400 - light gray placeholder */
+  opacity: 1;
+}
+

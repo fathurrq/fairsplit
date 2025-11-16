@@ -18,12 +18,6 @@ export default function Home() {
             Create New Bill
           </Link>
           <Link
-            href="/ocr-test"
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center"
-          >
-            OCR Test
-          </Link>
-          <Link
             href="/bills"
             className="bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold py-3 px-6 rounded-lg transition-colors text-center"
           >

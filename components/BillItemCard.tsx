@@ -1,7 +1,7 @@
 'use client'
 
 import { Item, Participant } from '@/lib/api-client'
-import { formatCurrency } from '@/lib/client-utils'
+import { formatNumber } from '@/lib/client-utils'
 
 interface BillItemCardProps {
   item: Item
@@ -33,7 +33,7 @@ export default function BillItemCard({
         </div>
         <div className="text-right ml-4">
           <div className="font-semibold text-gray-900">
-            {formatCurrency(parseFloat(item.totalPrice), 'USD')}
+            {formatNumber(parseFloat(item.totalPrice))}
           </div>
           {claimCount > 0 && (
             <div className="text-xs text-gray-500 mt-1">
@@ -44,7 +44,7 @@ export default function BillItemCard({
       </div>
       <div className="flex items-center justify-between mt-3">
         <div className="text-sm text-gray-600">
-          {item.quantity}x {formatCurrency(parseFloat(item.unitPrice), 'USD')}
+          {item.quantity}x {formatNumber(parseFloat(item.unitPrice))}
         </div>
         {canInteract && participantId && (
           <button

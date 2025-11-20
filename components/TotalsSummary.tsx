@@ -1,7 +1,7 @@
 'use client'
 
 import { ParticipantTotal } from '@/lib/api-client'
-import { formatCurrency } from '@/lib/client-utils'
+import { formatNumber } from '@/lib/client-utils'
 
 interface TotalsSummaryProps {
   totals: ParticipantTotal[]
@@ -38,30 +38,30 @@ export default function TotalsSummary({ totals, currency, isFinal }: TotalsSumma
             <div className="flex justify-between items-start mb-2">
               <span className="font-medium text-gray-900">{total.displayName}</span>
               <span className="font-bold text-lg text-gray-900">
-                {formatCurrency(parseFloat(total.total), currency)}
+                {formatNumber(parseFloat(total.total))}
               </span>
             </div>
             <div className="text-sm text-gray-600 space-y-1 ml-4">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
-                <span>{formatCurrency(parseFloat(total.subtotal), currency)}</span>
+                <span>{formatNumber(parseFloat(total.subtotal))}</span>
               </div>
               {parseFloat(total.taxShare) > 0 && (
                 <div className="flex justify-between">
                   <span>Tax:</span>
-                  <span>{formatCurrency(parseFloat(total.taxShare), currency)}</span>
+                  <span>{formatNumber(parseFloat(total.taxShare))}</span>
                 </div>
               )}
               {parseFloat(total.serviceShare) > 0 && (
                 <div className="flex justify-between">
                   <span>Service:</span>
-                  <span>{formatCurrency(parseFloat(total.serviceShare), currency)}</span>
+                  <span>{formatNumber(parseFloat(total.serviceShare))}</span>
                 </div>
               )}
               {parseFloat(total.tipShare) > 0 && (
                 <div className="flex justify-between">
                   <span>Tip:</span>
-                  <span>{formatCurrency(parseFloat(total.tipShare), currency)}</span>
+                  <span>{formatNumber(parseFloat(total.tipShare))}</span>
                 </div>
               )}
             </div>
@@ -73,29 +73,29 @@ export default function TotalsSummary({ totals, currency, isFinal }: TotalsSumma
         <div className="space-y-2 text-sm">
           <div className="flex justify-between text-gray-600">
             <span>Total Subtotal:</span>
-            <span>{formatCurrency(totalSubtotal, currency)}</span>
+            <span>{formatNumber(totalSubtotal)}</span>
           </div>
           {totalTax > 0 && (
             <div className="flex justify-between text-gray-600">
               <span>Total Tax:</span>
-              <span>{formatCurrency(totalTax, currency)}</span>
+              <span>{formatNumber(totalTax)}</span>
             </div>
           )}
           {totalService > 0 && (
             <div className="flex justify-between text-gray-600">
               <span>Total Service:</span>
-              <span>{formatCurrency(totalService, currency)}</span>
+              <span>{formatNumber(totalService)}</span>
             </div>
           )}
           {totalTip > 0 && (
             <div className="flex justify-between text-gray-600">
               <span>Total Tip:</span>
-              <span>{formatCurrency(totalTip, currency)}</span>
+              <span>{formatNumber(totalTip)}</span>
             </div>
           )}
           <div className="flex justify-between text-lg font-bold pt-2">
             <span>Grand Total:</span>
-            <span>{formatCurrency(grandTotal, currency)}</span>
+            <span>{formatNumber(grandTotal)}</span>
           </div>
         </div>
       </div>

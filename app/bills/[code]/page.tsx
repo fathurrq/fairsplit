@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { api, Bill, ParticipantTotal } from '@/lib/api-client'
 import BillItemCard from '@/components/BillItemCard'
 import TotalsSummary from '@/components/TotalsSummary'
-import { formatCurrency } from '@/lib/client-utils'
+import { formatNumber } from '@/lib/client-utils'
 
 export default function BillViewPage() {
   const params = useParams()
@@ -263,7 +263,7 @@ export default function BillViewPage() {
                 </div>
                 <div>
                   <div className="text-gray-600">Tip</div>
-                  <div className="font-semibold">{formatCurrency(parseFloat(bill.tipAmount), bill.currency)}</div>
+                  <div className="font-semibold">{formatNumber(parseFloat(bill.tipAmount))}</div>
                 </div>
               </div>
             </div>

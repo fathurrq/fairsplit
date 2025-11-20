@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createWorker } from 'tesseract.js'
 import { api } from '@/lib/api-client'
-import { formatCurrency } from '@/lib/client-utils'
+import { formatNumber } from '@/lib/client-utils'
 
 type InputMethod = 'camera' | 'upload' | 'manual'
 
@@ -195,6 +195,15 @@ export default function CreateBillPage() {
           if (response.ok) {
             const data = await response.json()
             setItems(data.items || [])
+            
+            // Automatically populate tax and service percentages if extracted
+            if (data.taxPercentage !== undefined && data.taxPercentage > 0) {
+              setTaxPercentage(data.taxPercentage)
+            }
+            if (data.servicePercentage !== undefined && data.servicePercentage > 0) {
+              setServicePercentage(data.servicePercentage)
+            }
+            
             setOcrStatus('AI parsing completed!')
           } else {
             const fallbackItems = parseBillItemsRegex(text)
@@ -368,6 +377,72 @@ export default function CreateBillPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Bill</h1>
         <p className="text-gray-600 mb-8">Choose how to add your bill items</p>
 
+        {/* Bill Information */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">Bill Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="billTitle" className="block text-sm font-medium text-gray-700 mb-2">
+                Bill Title <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="billTitle"
+                type="text"
+                placeholder="e.g., Dinner at Restaurant"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white placeholder:text-gray-400"
+              />
+            </div>
+            <div>
+              <label htmlFor="payerName" className="block text-sm font-medium text-gray-700 mb-2">
+                Your Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="payerName"
+                type="text"
+                placeholder="e.g., John Doe"
+                value={payerName}
+                onChange={(e) => setPayerName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white placeholder:text-gray-400"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <label htmlFor="taxPercentage" className="block text-sm font-medium text-gray-700 mb-2">
+                Tax Percentage (%)
+              </label>
+              <input
+                id="taxPercentage"
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                placeholder="e.g., 10"
+                value={taxPercentage || ''}
+                onChange={(e) => setTaxPercentage(parseFloat(e.target.value) || 0)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white placeholder:text-gray-400"
+              />
+            </div>
+            <div>
+              <label htmlFor="servicePercentage" className="block text-sm font-medium text-gray-700 mb-2">
+                Service Charge (%)
+              </label>
+              <input
+                id="servicePercentage"
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                placeholder="e.g., 5"
+                value={servicePercentage || ''}
+                onChange={(e) => setServicePercentage(parseFloat(e.target.value) || 0)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 bg-white placeholder:text-gray-400"
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Input Method Accordion */}
         <div className="bg-white rounded-lg shadow-md mb-6">
@@ -628,7 +703,7 @@ export default function CreateBillPage() {
                   <div className="flex-1">
                     <div className="font-medium">{item.name}</div>
                     <div className="text-sm text-gray-600">
-                      {item.quantity}x {formatCurrency(item.unitPrice, currency)} = {formatCurrency(item.totalPrice, currency)}
+                      {item.quantity}x {formatNumber(item.unitPrice)} = {formatNumber(item.totalPrice)}
                     </div>
                   </div>
                   <button
@@ -650,29 +725,29 @@ export default function CreateBillPage() {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
-                <span>{formatCurrency(subtotal, currency)}</span>
+                <span>{formatNumber(subtotal)}</span>
               </div>
               {taxPercentage > 0 && (
                 <div className="flex justify-between text-gray-600">
                   <span>Tax ({taxPercentage}%):</span>
-                  <span>{formatCurrency(taxAmount, currency)}</span>
+                  <span>{formatNumber(taxAmount)}</span>
                 </div>
               )}
               {servicePercentage > 0 && (
                 <div className="flex justify-between text-gray-600">
                   <span>Service ({servicePercentage}%):</span>
-                  <span>{formatCurrency(serviceAmount, currency)}</span>
+                  <span>{formatNumber(serviceAmount)}</span>
                 </div>
               )}
               {tipAmount > 0 && (
                 <div className="flex justify-between text-gray-600">
                   <span>Tip:</span>
-                  <span>{formatCurrency(tipAmount, currency)}</span>
+                  <span>{formatNumber(tipAmount)}</span>
                 </div>
               )}
               <div className="flex justify-between text-lg font-bold border-t pt-2">
                 <span>Total:</span>
-                <span>{formatCurrency(total, currency)}</span>
+                <span>{formatNumber(total)}</span>
               </div>
             </div>
           </div>

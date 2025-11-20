@@ -2,28 +2,26 @@
 // These functions can be safely used in client components
 
 /**
- * Format a number or string as currency
+ * Format a number with dot thousand separators and comma decimal separator
  * @param amount - The amount to format (number or string)
- * @param currency - The currency code (default: 'USD')
- * @returns Formatted currency string
+ * @param decimals - Number of decimal places (default: 2)
+ * @returns Formatted number string (e.g., 1.000,00)
  */
-export function formatCurrency(amount: number | string, currency: string = 'USD'): string {
+export function formatNumber(amount: number | string, decimals: number = 2): string {
   // Handle both number and string inputs
   const num = typeof amount === 'number' 
     ? amount 
     : parseFloat(String(amount).replace(/[^0-9.-]/g, ''))
   
-  // Return formatted currency, or $0.00 if invalid
+  // Return 0.00 if invalid
   if (isNaN(num) || !isFinite(num)) {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-    }).format(0)
+    return '0' + (decimals > 0 ? ',' + '0'.repeat(decimals) : '')
   }
   
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency,
+  // Format with dot as thousand separator and comma as decimal separator
+  return new Intl.NumberFormat('de-DE', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
   }).format(num)
 }
 
